@@ -6,6 +6,10 @@ import (
 	"testing"
 )
 
+var (
+	testCropImg = ``
+)
+
 func TestCrop(t *testing.T) {
 	t.Skip()
 	opts := []*CropOption{
@@ -15,7 +19,7 @@ func TestCrop(t *testing.T) {
 			Anchor: Center,
 		},
 	}
-	over, err := Open("testdata/soft0000.tif")
+	over, err := Open(testCropImg)
 	if err != nil {
 		t.Fatal(err)
 	}

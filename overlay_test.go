@@ -7,6 +7,11 @@ import (
 	"testing"
 )
 
+var (
+	testOverBg  = ``
+	testOverImg = ``
+)
+
 func TestOverlay(t *testing.T) {
 	t.Skip()
 	opts := []*OverlayOption{
@@ -28,11 +33,11 @@ func TestOverlay(t *testing.T) {
 			Center:   true,
 		},
 	}
-	bg, err := Open("testdata/body0000.tif")
+	bg, err := Open(testOverBg)
 	if err != nil {
 		t.Fatal(err)
 	}
-	over, err := Open("testdata/soft0000.tif")
+	over, err := Open(testOverImg)
 	if err != nil {
 		t.Fatal(err)
 	}
