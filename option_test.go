@@ -31,6 +31,10 @@ func TestOption(t *testing.T) {
 	if mark != opts.Watermark.Mark || opts.Watermark.Opacity != 128 {
 		t.Fatal("SetWatermark result is not expect one.")
 	}
+	opts.SetOverlay(0, 0, 0.5)
+	if opts.Overlay.Position.X != 0 || opts.Overlay.Position.Y != 0 || opts.Overlay.Opacity != 0.5 {
+		t.Fatal("SetOpacity result is not expect one.")
+	}
 	opts.SetResize(0, 0, 33)
 	if opts.Resize.Width != 0 || opts.Resize.Height != 0 || opts.Resize.Percent != 33 {
 		t.Fatal("SetResize result is not expect one.")
