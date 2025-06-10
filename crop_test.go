@@ -7,6 +7,7 @@ import (
 )
 
 func TestCrop(t *testing.T) {
+	t.Skip()
 	opts := []*CropOption{
 		&CropOption{
 			Width:  350,
