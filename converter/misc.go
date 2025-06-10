@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sunshineplan/imgconv"
+	"github.com/ohzqq/imgconv"
 	"github.com/sunshineplan/tiff"
 	"github.com/sunshineplan/utils/log"
 )
@@ -22,7 +22,7 @@ var (
 	tiffImage = regexp.MustCompile(`(?i)\.tiff?$`)
 )
 
-func open(file string) (image.Image, error) {
+func Open(file string) (image.Image, error) {
 	img, err := imgconv.Open(file, imgconv.AutoOrientation(*autoOrientation))
 	if err != nil && tiffImage.MatchString(file) {
 		f, err := os.Open(file)
@@ -35,7 +35,7 @@ func open(file string) (image.Image, error) {
 	return img, err
 }
 
-func loadImages(root string, pdf bool) (imgs []string) {
+func LoadImages(root string, pdf bool) (imgs []string) {
 	var message string
 	var width int
 	done := make(chan struct{})
@@ -75,7 +75,7 @@ func loadImages(root string, pdf bool) (imgs []string) {
 
 var errSkip = errors.New("skip")
 
-func convert(task *imgconv.Options, image, output string, force bool) (err error) {
+func Convert(task *imgconv.Options, image, output string, force bool) (err error) {
 	if _, err = os.Stat(output); err == nil {
 		if !force {
 			return errSkip
@@ -89,7 +89,7 @@ func convert(task *imgconv.Options, image, output string, force bool) (err error
 		log.Error("Failed to create directory", "path", path, "error", err)
 		return
 	}
-	img, err := open(image)
+	img, err := Open(image)
 	if err != nil {
 		log.Error("Failed to open image", "image", image, "error", err)
 		return

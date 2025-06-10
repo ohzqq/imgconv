@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/sunshineplan/imgconv"
+	"github.com/ohzqq/imgconv"
 	"github.com/sunshineplan/utils/flags"
 	"github.com/sunshineplan/utils/log"
 	"github.com/sunshineplan/utils/progressbar"
@@ -136,20 +136,20 @@ func main() {
 	if *test {
 		switch {
 		case srcInfo.Mode().IsDir():
-			images := loadImages(*src, *pdf)
+			images := LoadImages(*src, *pdf)
 			total := len(images)
 			log.Println("Total images:", total)
 			pb := progressbar.New(total)
 			pb.Start()
 			workers.Workers(*worker).Run(context.Background(), workers.SliceJob(images, func(_ int, image string) {
 				defer pb.Add(1)
-				if _, err := open(image); err != nil {
+				if _, err := Open(image); err != nil {
 					log.Error("Bad image", "image", image, "error", err)
 				}
 			}))
 			pb.Done()
 		case srcInfo.Mode().IsRegular():
-			if _, err := open(*src); err != nil {
+			if _, err := Open(*src); err != nil {
 				log.Error("Bad image", "image", *src, "error", err)
 			}
 		default:
@@ -216,7 +216,7 @@ func main() {
 			code = 1
 			return
 		}
-		images := loadImages(*src, *pdf)
+		images := LoadImages(*src, *pdf)
 		total := len(images)
 		log.Println("Total images:", total)
 		pb := progressbar.New(total)
@@ -231,7 +231,7 @@ func main() {
 				return
 			}
 			output := task.ConvertExt(filepath.Join(*dst, rel))
-			if err := convert(task, image, output, *force); err != nil {
+			if err := Convert(task, image, output, *force); err != nil {
 				if err == errSkip && !*quiet {
 					log.Println("Skip", output)
 				}
@@ -247,7 +247,7 @@ func main() {
 		if dstInfo.Mode().IsDir() {
 			output = task.ConvertExt(filepath.Join(output, srcInfo.Name()))
 		}
-		if err := convert(task, *src, output, *force); err != nil {
+		if err := Convert(task, *src, output, *force); err != nil {
 			if err == errSkip {
 				log.Error("Destination already exist", "destination", output)
 			}
