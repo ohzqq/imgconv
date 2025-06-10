@@ -15,6 +15,7 @@ type Options struct {
 	Watermark *WatermarkOption
 	Resize    *ResizeOption
 	Format    *FormatOption
+	Overlay   *OverlayOption
 	Gray      bool
 }
 
@@ -32,6 +33,18 @@ func (opts *Options) SetWatermark(mark image.Image, opacity uint) *Options {
 		opts.Watermark.Opacity = uint8(opacity)
 	}
 
+	return opts
+}
+
+// SetOverlay sets the value for the Overlay field.
+func (opts *Options) SetOverlay(x, y int, opacity float64) *Options {
+	opts.Overlay = &OverlayOption{
+		Position: image.Point{
+			X: x,
+			Y: y,
+		},
+		Opacity: opacity,
+	}
 	return opts
 }
 
