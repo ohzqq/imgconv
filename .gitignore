@@ -18,3 +18,5 @@ converter
 *.ini
 *.log
 output
+testdata/body0000.tif
+testdata/soft0000.tif
