@@ -8,7 +8,7 @@ import (
 )
 
 func TestOverlay(t *testing.T) {
-	t.Skip()
+	//t.Skip()
 	opts := []*OverlayOption{
 		&OverlayOption{
 			Position: image.Point{X: 0, Y: 0},
@@ -21,6 +21,11 @@ func TestOverlay(t *testing.T) {
 		&OverlayOption{
 			Position: image.Point{X: 0, Y: 100},
 			Opacity:  1.0,
+		},
+		&OverlayOption{
+			Position: image.Point{X: 0, Y: 100},
+			Opacity:  1.0,
+			Center:   true,
 		},
 	}
 	bg, err := Open("testdata/body0000.tif")
