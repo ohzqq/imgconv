@@ -4,6 +4,7 @@ go 1.24
 
 require (
 	github.com/HugoSmits86/nativewebp v1.2.0
+	github.com/sunshineplan/imgconv v1.1.14
 	github.com/sunshineplan/pdf v1.0.8
 	golang.org/x/image v0.28.0
 )
