@@ -20,4 +20,5 @@ converter
 output
 testdata/body0000.tif
 testdata/soft0000.tif
+testdata/soft0000-cropped.tif
 testdata/test*

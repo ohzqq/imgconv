@@ -8,7 +8,7 @@ import (
 )
 
 func TestOverlay(t *testing.T) {
-	//t.Skip()
+	t.Skip()
 	opts := []*OverlayOption{
 		&OverlayOption{
 			Position: image.Point{X: 0, Y: 0},

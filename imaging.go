@@ -895,6 +895,91 @@ func overlayCenter(background, img image.Image, opacity float64) *image.NRGBA {
 	return overlay(background, img, image.Point{x0, y0}, opacity)
 }
 
+// Anchor is the anchor point for image alignment.
+type Anchor int
+
+// Anchor point positions.
+const (
+	Center Anchor = iota
+	TopLeft
+	Top
+	TopRight
+	Left
+	Right
+	BottomLeft
+	Bottom
+	BottomRight
+)
+
+func anchorPt(b image.Rectangle, w, h int, anchor Anchor) image.Point {
+	var x, y int
+	switch anchor {
+	case TopLeft:
+		x = b.Min.X
+		y = b.Min.Y
+	case Top:
+		x = b.Min.X + (b.Dx()-w)/2
+		y = b.Min.Y
+	case TopRight:
+		x = b.Max.X - w
+		y = b.Min.Y
+	case Left:
+		x = b.Min.X
+		y = b.Min.Y + (b.Dy()-h)/2
+	case Right:
+		x = b.Max.X - w
+		y = b.Min.Y + (b.Dy()-h)/2
+	case BottomLeft:
+		x = b.Min.X
+		y = b.Max.Y - h
+	case Bottom:
+		x = b.Min.X + (b.Dx()-w)/2
+		y = b.Max.Y - h
+	case BottomRight:
+		x = b.Max.X - w
+		y = b.Max.Y - h
+	default:
+		x = b.Min.X + (b.Dx()-w)/2
+		y = b.Min.Y + (b.Dy()-h)/2
+	}
+	return image.Pt(x, y)
+}
+
+// crop cuts out a rectangular region with the specified bounds
+// from the image and returns the cropped image.
+func crop(img image.Image, rect image.Rectangle) *image.NRGBA {
+	r := rect.Intersect(img.Bounds()).Sub(img.Bounds().Min)
+	if r.Empty() {
+		return &image.NRGBA{}
+	}
+	src := newScanner(img)
+	dst := image.NewNRGBA(image.Rect(0, 0, r.Dx(), r.Dy()))
+	rowSize := r.Dx() * 4
+	parallel(r.Min.Y, r.Max.Y, func(ys <-chan int) {
+		for y := range ys {
+			i := (y - r.Min.Y) * dst.Stride
+			src.scan(r.Min.X, y, r.Max.X, y+1, dst.Pix[i:i+rowSize])
+		}
+	})
+	return dst
+}
+
+// cropAnchor cuts out a rectangular region with the specified size
+// from the image using the specified anchor point and returns the cropped image.
+func cropAnchor(img image.Image, width, height int, anchor Anchor) *image.NRGBA {
+	srcBounds := img.Bounds()
+	pt := anchorPt(srcBounds, width, height, anchor)
+	r := image.Rect(0, 0, width, height).Add(pt)
+	b := srcBounds.Intersect(r)
+	return crop(img, b)
+}
+
+// cropCenter cuts out a rectangular region with the specified size
+// from the center of the image and returns the cropped image.
+func cropCenter(img image.Image, width, height int) *image.NRGBA {
+	return cropAnchor(img, width, height, Center)
+}
+
 //
 // transform.go
 //
