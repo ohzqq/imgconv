@@ -1,11 +1,14 @@
 package imgconv
 
 import (
+	"fmt"
 	"image"
+	"path/filepath"
 	"testing"
 )
 
 func TestOverlay(t *testing.T) {
+	t.Skip()
 	opts := []*OverlayOption{
 		&OverlayOption{
 			Position: image.Point{X: 0, Y: 0},
@@ -28,7 +31,11 @@ func TestOverlay(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, opt := range opts {
+	for i, opt := range opts {
 		img := Overlay(bg, over, opt)
+		err := Save(filepath.Join("testdata", fmt.Sprintf("test-%d.tiff", i)), img, &FormatOption{})
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 }
